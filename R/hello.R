@@ -1,0 +1,98 @@
+#Projekt Bartlomiej Kalata
+# Projekt konwertujący temperatury
+
+#definiuje funkcję generyczną:
+
+TempConvert <- function(x, metoda, ...) UseMethod("TempConvert")
+
+
+TempConvert.default<- function(x,metoda="ctok") {
+  # Sprawdzanie poprawności argumentów
+  stopifnot(is.numeric(x))
+  metoda <- match.arg(metoda, c("ctok", "ftoc","ctof","ktoc","ftok","ktof"))
+  # Konwersja Celsius - Kelvin
+  temp_K <- x + 273.15
+  result <- list(Temperatura = paste(x,'°C'), Konwersja = paste(temp_K,'°K'),Temp=x,Konw=temp_K)
+  class(result)<-append(class(result),'TempConvert')
+  return(result)
+}
+
+
+TempConvert <- function(x,metoda){
+  # Sprawdzanie poprawności argumentów
+  stopifnot(is.numeric(x))
+  metoda <- match.arg(metoda, c("ctok", "ftoc","ctof","ktoc","ftok","ktof"))
+  switch (metoda,
+    ctok={
+      # Konwersja Celsius - Kelvin
+      temp_K <- x + 273.15
+      result <- list(Temperatura = paste(x,'°C'), Konwersja = paste(temp_K,'°K'),Temp=x,Konw=temp_K)
+      class(result)<-append(class(result),'TempConvert')
+      return(result)
+    },
+    ftoc={
+      # Konwersja Fahrenheit-Celsius
+      temp_C <- (x - 32) * 5 / 9
+      result <- list(Temperatura = paste(x,'°F'), Konwersja = paste(temp_C,'°C'),Temp=x,Konw=temp_C)
+      class(result)<-append(class(result),'TempConvert')
+      return(result)
+    },
+    ctof={
+      # Konwersja Celsius-Fahrenheit
+      temp_F <- 32+(9/5*x)
+      result <- list(Temperatura = paste(x,'°C'), Konwersja = paste(temp_F,'°F'),Temp=x,Konw=temp_F)
+      class(result)<-append(class(result),'TempConvert')
+      return(result)
+    },
+    ktoc={
+      # Konwersja Kelvin - Celsius
+      temp_C <- x - 273.15
+      result <- list(Temperatura = paste(x,'°K'), Konwersja = paste(temp_C,'°C'),Temp=x,Konw=temp_C)
+      class(result)<-append(class(result),'TempConvert')
+      return(result)
+    },
+    ftok={
+      # Konwersja Fahrenheit - Kelvin
+      temp_K <- (x+459.67)*5/9
+      result <- list(Temperatura = paste(x,'°F'), Konwersja = paste(temp_K,'°K'),Temp=x,Konw=temp_K)
+      class(result)<-append(class(result),'TempConvert')
+      return(result)
+    },
+    ktof={
+      # Konwersja  Kelvin-Fahrenheit
+      temp_F <- (x*1.8)-459.67
+      result <- list(Temperatura = paste(x,'°K'), Konwersja = paste(temp_F,'°F'),Temp=x,Konw=temp_F)
+      class(result)<-append(class(result),'TempConvert')
+      return(result)
+    }
+  )
+
+}
+
+
+
+
+print.TempConvert <- function(x,...)
+{
+  cat("Temperatura wejściowa\n")
+  print(x$Temperatura)
+  cat("\nTemperatura po konwersji:\n")
+  print(x$Konwersja)
+}
+
+TempConvert(30,"ctok")
+
+
+plot.TempConvert<-function(x,...){
+    data<-data.frame(
+    name=c(x$Temperatura,x$Konwersja),
+    value=c(x$Temp,x$Konw)
+  )
+  barplot(height=data$value, names=data$name, col=rgb(0.2,0.4) )
+}
+
+
+TempConvert(30,"ctok")
+
+package.skeleton(name="TempConvert", list=c( "TempConvert","TempConvert.default", "print.TempConvert", "plot.TempConvert"),  path = ".")
+
