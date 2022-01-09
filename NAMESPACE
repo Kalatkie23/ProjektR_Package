@@ -1,0 +1,6 @@
+exportPattern("^[[:alpha:]]+")
+S3method(print, TempConvert)
+S3method(plot, TempConvert)
+S3method(TempConvert, default)
+importFrom("grDevices", "rgb")
+importFrom("graphics", "barplot")
